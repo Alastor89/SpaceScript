@@ -28,7 +28,7 @@ function [delta_v,theta_1,omega_2]=inclinationchange(a,e,i_1,OMEGA_1,i_2,OMEGA_2
 
 delta_i = i_2 - i_1;
 delta_OMEGA = OMEGA_2 - OMEGA_1;
-delta_check = delta_i*delta_omega
+delta_check = delta_i*delta_OMEGA;
 
 % Calcolo alpha sfruttando il teorma del coseno visto a lezione, ovvero
 %
@@ -69,8 +69,8 @@ end
 % Calcolo il costo della manovra in termini di delta_v
 
 p = a*(1 - e^2);
-v_teta = sqrt(mu_p/p)*(1 + e*cos(teta_1));    
-delta_v = 2*v_teta*sin(alpha/2);
+v_theta = sqrt(mu/p)*(1 + e*cos(theta_1));    
+delta_v = 2*v_theta*sin(alpha/2);
 
 end
 

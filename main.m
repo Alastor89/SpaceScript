@@ -35,10 +35,10 @@ Z(:,3) = linspace(-l/2,l/2,l);
                 mu_t = 398600;
 	% Applico gli algoritmi per calcolarmi 
 		% Calcolo i parametri orbiati per il punto iniziale
-			[a_i,e_i,i_i,omega_i,OMEGA_i,theta_i] = pos2par(r_i,v_i,mu_t);
+			[a_i,e_i,i_i,omega_i,OMEGA_i,theta_i] = pos2par(r_i,v_i,mu_t)
 			e_i = norm(e_i);
 		% Calcolo i vettori r,v per il punto finale
-			[r_f,v_f] = par2pos(a_f,e_f,i_f,OMEGA_f,omega_f,theta_f,mu_t);
+			[r_f,v_f] = par2pos(a_f,e_f,i_f,OMEGA_f,omega_f,theta_f,mu_t)
 
 % Provo a fare il plot delle orbite
 	% Calcolo posizioni iniziali e finali al variare di theta, da 0 a 360
@@ -60,6 +60,8 @@ Z(:,3) = linspace(-l/2,l/2,l);
 	% Plot Terra
     		RT = 6378;
     		load('topo.mat','topo','topomap1');
+            hold on
+            grid on
 
 	% Crea la superficie
 		[x,y,z] = sphere(50);
@@ -76,5 +78,4 @@ Z(:,3) = linspace(-l/2,l/2,l);
 		props.FaceLighting = 'phong';
 		props.Cdata = topo;
 		eh=surface(x,y,z,props);
-		hold on
 

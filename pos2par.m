@@ -25,9 +25,9 @@ function [a,e,i,omega,OMEGA,theta] = pos2par(r,v,mu)
 % (C) 2014
 
 % Versori terna
-i = [1;0;0];
-j = [0;1;0];
-k = [0;0;1];
+I = [1;0;0];
+J = [0;1;0];
+K = [0;0;1];
 
 % Passo 1
 R = norm(r);
@@ -44,29 +44,29 @@ H = norm(h);
 
 % Passo 4
 
-e = 1/mu*(cross(v,h) - mu * r./R);
+e = 1/mu*(cross(v,h)- mu * r./R);
 E = norm(e);
 
 % Passo 5
 
-i = acos(dot(h,k)/H);
+i = acos(dot(h,K)./H);
 
 % Passo 6
 
-n = cross(k,h)./norm(cross(k,h));
+n = cross(K,h)./norm(cross(K,h));
 
 % Passo 7
 
-if dot(n,j) > 0
-	OMEGA = acos(dot(i,n));
+if dot(n,J) > 0
+	OMEGA = acos(dot(I,n));
 else
-	OMEGA = 2*pi - acos(dot(i,n));
+	OMEGA = 2*pi-acos(dot(I,n));
 end
 
 
 % Passo 8
 
-if dot(e,k) > 0
+if dot(e,K) > 0
 	omega = acos((dot(n,e))/E);
 else
 	omega = 2*pi - acos((dot(n,e))/E);
@@ -76,8 +76,10 @@ end
 % Passo 9
 
 if dot(v,r) > 0
+    fprintf('Maggiore')
 	theta = acos((dot(r,e))/R*E);
 else
+    fprintf('Minore')
 	theta = 2*pi - acos((dot(r,e))/R*E);
 end
 
