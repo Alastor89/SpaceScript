@@ -23,6 +23,12 @@ function [delta_v,theta_1,omega_2]=inclinationchange(a,e,i_1,OMEGA_1,i_2,OMEGA_2
 % emal : francescodario.cuzzocrea@mail.polimi.it
 % (C) 2014
 
+h = waitbar(0,'Please wait...');
+
+if nargin == 7
+    w = msgbox('Hai dimenticato mu, lo sto automaticamente settando a 398600');
+    mu = 398600;
+end
 
 % Calcolo i delta_i e delta_OMEGA 
 
@@ -71,6 +77,8 @@ end
 p = a*(1 - e^2);
 v_theta = sqrt(mu/p)*(1 + e*cos(theta_1));    
 delta_v = 2*v_theta*sin(alpha/2);
+
+close(h)
 
 end
 

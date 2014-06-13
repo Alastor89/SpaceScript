@@ -19,18 +19,36 @@ function [delta_t] = times(a,e,theta_1,theta_2,mu)
 % anomalia vera theta_1 ad un anomalia vera theta_2, dati semiasse maggiore
 % ed eccentricità 
 
+h = waitbar(0,'Computating times...');
 
+if nargin == 4
+    w = msgbox('Hai dimenticato mu, lo sto automaticamente settando a 398600');
+    mu = 398600;
+end
 
-% Calcolo l'anomalia eccentrica    http://en.wikipedia.org/wiki/Eccentric_anomaly
+% Inserisco un check sull'eccentricità per vedere con che tipo di orbita ho
+% a che fare, diversi casi disponibili. In ognuno dei casi calcolo
+% l'appropriato parametro dell'orbita ed i 2 tempi  impiegati a percorrerla
 
-E_1 = 2*atan(sqrt((1-e)/(1+e)))*tan(theta_1/2);
-E_2 = 2*atan(sqrt((1-e)/(1+e)))*tan(theta_2/2);
-
-% Calcolo i tempi dal pericentro, la formula l'abbiamo vista all'inizio del
-% corso !!!
-
-t_1 = sqrt(a^3/mu)*(E_1 - e*sin(E_1));
-t_2 = sqrt(a^3/mu)*(E_2 - e*sin(E_2));
+if e > 0 || e < 1
+    % Orbita ellittica
+    E_1 = 2*atan(sqrt((1-e)/(1+e)))*tan(theta_1/2);
+    E_2 = 2*atan(sqrt((1-e)/(1+e)))*tan(theta_2/2);
+    t_1 = sqrt(a^3/mu)*(E_1 - e*sin(E_1));
+    t_2 = sqrt(a^3/mu)*(E_2 - e*sin(E_2));
+elseif e == 1
+    % Orbita parabolica    
+    D_1 = tan(theta_1/2);             
+    D_2 = tan(theta_2/2);
+    t_1 = 0.5*sqrt(p^3/mu)*(D_1+D_1^3/3);
+    t_2 = 0.5*sqrt(p^3/mu)*(D_2+D_2^3/3);
+elseif e > 1
+    % orbita iperbolica    
+     F_1 = 2*atanh((sqrt((e+1)/(e-1)))*tan(theta_1/2));              
+     F_2 = 2*atanh((sqrt((e+1)/(e-1)))*tan(theta_2/2));
+     t_1 = sqrt(-a/mu)*(e*sinh(F_1)-F_1);   
+     t_2 = sqrt(-a/mu)*(e*sinh(F_2)-F_2);
+end
 
 % Posso quindi calcolarmi il periodo che mi servirà più avanti 
 
@@ -53,6 +71,7 @@ if theta_2 > theta_1
 else
     delta_t = t_2 - t_1 + T;
 end
-
+close(h)
+end
 
 
