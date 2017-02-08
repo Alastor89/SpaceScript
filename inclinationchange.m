@@ -1,4 +1,4 @@
-function [delta_v,theta_1,omega_2]=inclinationchange(a,e,i_1,OMEGA_1,i_2,OMEGA_2,omega_1,mu)
+function [delta_v,theta_1,omega_2]=inclinationchange(a,e,i_1,OMEGA_1,i_2,OMEGA_2,omega_1,punto,mu)
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation; either version 2 of the License, or
@@ -15,17 +15,11 @@ function [delta_v,theta_1,omega_2]=inclinationchange(a,e,i_1,OMEGA_1,i_2,OMEGA_2
 %
 % PARAMETRI DI USCITA :
 % 
-% delta_v                         Costo della manovra in termini di delta_v
+% delta_v             Costo della manovra in termini di delta_v
 % theta_1			  Anomalia vera all'inizio della manovra
 % omega_2			  Anomalia di pericentro alla fine della manovra
-%
-% % Author : Francescodario Cuzzocrea
-% emal : francescodario.cuzzocrea@mail.polimi.it
-% (C) 2014
 
-h = waitbar(0,'Please wait...');
-
-if nargin == 7
+if nargin == 8
     w = msgbox('Hai dimenticato mu, lo sto automaticamente settando a 398600');
     mu = 398600;
 end
@@ -52,7 +46,7 @@ if delta_check > 0
 	    cos_u_2 = (cos(i_1) - cos(i_2)*cos(alpha)) / (sin(i_2)*sin(alpha));	
 else
 	    cos_u_1 = (cos(i_2) - cos(alpha)*cos(i_1)) / (sin(alpha)*sin(i_1));
-    	    cos_u_2 = (cos(alpha)*cos(i_2) - cos(i_1)) / (sin(alpha)*sin(i_2));
+    	cos_u_2 = (cos(alpha)*cos(i_2) - cos(i_1)) / (sin(alpha)*sin(i_2));
 end
 
 % Ricavo i seni di u1 ed u2, e tramite l'arcotangente risalgo ai valori di u1 ed u2
@@ -62,23 +56,40 @@ sin_u_2 = sin(i_1)*(sin(delta_OMEGA)/sin(alpha));
 u_1 = atan2(sin_u_1,cos_u_1);
 u_2 = atan2(sin_u_2,cos_u_2);
 
+
 % Posso ricavare theta ed omega_2 dal sistema di equazioni visto a lezione
 
-if delta_check >  0
-	theta_1 = u_1 - omega_1;
-	omega_2 = u_2 - theta_1;
-else
-	theta_1 = 2*pi - (omega_1 + u_1);
-	omega_2 = 2*pi - (u_2 + theta_1);
+switch punto
+    case 0
+        if delta_check >  0
+            theta_1 = u_1 - omega_1;
+            omega_2 = u_2 - theta_1;
+        else
+            theta_1 = 2*pi - (omega_1 + u_1);
+            omega_2 = 2*pi - u_2 - theta_1;
+        end
+        
+        p = a*(1 - e^2);
+               
+        v_theta = sqrt(mu/p)*(1 + e*cos(theta_1));
+        delta_v = 2*v_theta*sin(alpha/2);
+    case 1       
+        if delta_check >  0
+            theta_1 = u_1 - omega_1 + pi;
+            omega_2 = u_2 - theta_1;
+        else
+            theta_1 = 2*pi - (omega_1 + u_1) + pi;
+            omega_2 = 2*pi - u_2 - theta_1;
+        end
+        
+        p = a*(1 - e^2);
+        
+        v_theta = sqrt(mu/p)*(1 + e*cos(theta_1));
+        delta_v = 2*v_theta*sin(alpha/2);
+end
+        
+if theta_1 < 0
+    theta_1 = theta_1 + 2*pi;
 end
 
-% Calcolo il costo della manovra in termini di delta_v
-
-p = a*(1 - e^2);
-v_theta = sqrt(mu/p)*(1 + e*cos(theta_1));    
-delta_v = 2*v_theta*sin(alpha/2);
-
-close(h)
-
 end
-

@@ -11,15 +11,9 @@ function [delta_t] = time(a,e,theta_1,theta_2,mu)
 % with this program; if not, write to the Free Software Foundation, Inc.,
 % 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 %
-% Questa function implementa il cambio di anomalia del pericentro tra due
-% orbite aventi lo stesso semiasse maggiore e la stessa eccentricità. 
-% Fornire il parametro gravitazionale di riferimento
-% 
 % Questa function serve a calcolare il tempo trascorso per spostarsi da un
 % anomalia vera theta_1 ad un anomalia vera theta_2, dati semiasse maggiore
 % ed eccentricità 
-
-h = waitbar(0,'Computating times...');
 
 if nargin == 4
     w = msgbox('Hai dimenticato mu, lo sto automaticamente settando a 398600');
@@ -32,10 +26,10 @@ end
 
 if e > 0 || e < 1
     % Orbita ellittica
-    E_1 = 2*atan(sqrt((1-e)/(1+e)))*tan(theta_1/2);
-    E_2 = 2*atan(sqrt((1-e)/(1+e)))*tan(theta_2/2);
-    t_1 = sqrt(a^3/mu)*(E_1 - e*sin(E_1));
-    t_2 = sqrt(a^3/mu)*(E_2 - e*sin(E_2));
+    E_1 = 2*atan(sqrt((1-e)/(1+e))*tan(theta_1/2))
+    E_2 = 2*atan(sqrt((1-e)/(1+e))*tan(theta_2/2))
+    t_1 = sqrt(a^3/mu)*(E_1 - e*sin(E_1))
+    t_2 = sqrt(a^3/mu)*(E_2 - e*sin(E_2))
 elseif e == 1
     % Orbita parabolica    
     D_1 = tan(theta_1/2);             
@@ -71,7 +65,7 @@ if theta_2 > theta_1
 else
     delta_t = t_2 - t_1 + T;
 end
-close(h)
+
 end
 
 

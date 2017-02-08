@@ -24,8 +24,6 @@ function [a,e,i,omega,OMEGA,theta] = pos2par(r,v,mu)
 % emal : francescodario.cuzzocrea@mail.polimi.it
 % (C) 2014
 
-h = waitbar(0,'Please wait...');
-
 if nargin == 2
     w = msgbox('Hai dimenticato mu, lo sto automaticamente settando a 398600');
     mu = 398600;
@@ -84,13 +82,11 @@ end
 
 if dot(v,r) > 0
     fprintf('Maggiore')
-	theta = acos((dot(r,e))/R*E);
+	theta = acos((dot(r,e))/(R*E));
 else
     fprintf('Minore')
-	theta = 2*pi - acos((dot(r,e))/R*E);
+	theta = 2*pi - acos((dot(r,e))/(R*E));
 end
-
-close(h)
 
 end
 

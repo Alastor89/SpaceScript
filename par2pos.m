@@ -1,4 +1,4 @@
-function [r,v] = par2pos(a,e,i,omega,OMEGA,theta,mu)
+function [r,v] = par2pos(a,e,i,OMEGA,omega,theta,mu)
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation; either version 2 of the License, or
@@ -19,10 +19,11 @@ function [r,v] = par2pos(a,e,i,omega,OMEGA,theta,mu)
 % r			Vettore Posizione
 % v			Vettore Velocità
 % mu			Parametro gravitazionale
-%
-% Author : Francescodario Cuzzocrea
-% emal : francescodario.cuzzocrea@mail.polimi.it
-% (C) 2014
+
+if nargin == 6
+    w = msgbox('Hai dimenticato mu, lo sto automaticamente settando a 398600');
+    mu = 398600;
+end
 
 % Il parametro p è noto
 
@@ -45,7 +46,7 @@ omega_ROT = [cos(omega), sin(omega), 0; -sin(omega), cos(omega), 0; 0, 0, 1];
 
 % Matrice di rotazione completa
 
-T = OMEGA_ROT*i_ROT*omega_ROT;
+T = omega_ROT*i_ROT*OMEGA_ROT;
 
 % Calcolo i vettori posizione e velocità nel sistema di riferimento geocentrico equatoriale
 

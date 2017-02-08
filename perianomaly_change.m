@@ -28,8 +28,6 @@ function [delta_v, teta_2] = perianomaly_change(a, e, omega_1, omega_2, theta_1,
 % delta_v               delta_v da fornire
 % theta_2               anomalia vera orbita finale, in radianti
 
-h = waitbar(0,'Computating delta_v...');
-
 if nargin == 5
     w = msgbox('Hai dimenticato mu, lo sto automaticamente settando a 398600');
     mu = 398600;
@@ -53,8 +51,6 @@ else
 end
 
 theta_2 = mod(theta_2,2*pi);
-
-close(h)
 
 end
  
